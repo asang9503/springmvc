@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+默认如果核心控制器的路径指定为"/"。那么静态资源会被拦截。
+因为"/"表示的是除了jsp以外的其他资源，也就是除了.jsp以外的所有请求都会通过DispaterServlet。
+经过他之后，核心控制器就会根据当前的请求路径执行对应带有@Requestmapping的方法。
+<br/>
+解决方案:
+1修改核心控制器的路径，比如改成"*.do"。那么jsp和静态资源都不会再通过核心控制器了。以后所有的业务处理器路径指定的时候需要指定一个.do后缀。
+2
+
+</body>
+</html>

@@ -1,0 +1,62 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.1.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.1.xsd">
+
+
+	<!-- 跟节点也是beans，因为本身springmvc就是spring的一个功能。 -->
+
+	<!-- springmvc开发过程中都会使用注解的方式，所以要开启注解 -->
+	<context:component-scan base-package="com.qfedu"></context:component-scan>
+
+	<!-- 配置映射解析器：如何将控制器返回的结果字符串，转换为一个物理的视图文件 -->
+	<!-- internalResourceViewResolver是一个springmvc提供对象，负责进行转发功能，转发具体的jsp文件 -->
+	<bean id="internalResourceViewResolver"
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/WEB-INF/views/" />
+		<property name="suffix" value=".jsp" />
+	</bean>
+
+	<!--mvc:annotation-driven 启用springmvc完整的功能. -->
+	<mvc:annotation-driven />
+	<!-- 使用默认的servlet处理静态资源 -->
+	<mvc:default-servlet-handler />
+
+
+	<!-- 配置文件上传解析器 id必须是"multipartResolver",否则，会报错误： java.lang.IllegalArgumentException: 
+		Expected MultipartHttpServletRequest: is a MultipartResolver configured? -->
+	<bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="defaultEncoding" value="UTF-8"></property>
+		<property name="maxUploadSize" value="1024000"></property>
+	</bean>
+
+
+	<!-- 用于自定义拦截器的声明配置 -->
+	<mvc:interceptors>
+
+		<!-- 将自定义的拦截器以bean形式声明在mvc:interceptors中，那么springmvc就会将他作为一个拦截器使用 ，默认范围是所有的业务控制器 -->
+		<!-- <bean id="executtime" class="com.qfedu.interceptor.ExcuteTimeInterceptor"></bean> -->
+		<!-- 如果想要为拦截器指定范围可以通过 mvc:interceptor标签 -->
+
+		<mvc:interceptor>
+			<!-- 表示拦截user目录的子目录和后代目录所有的资源，如果只有一个"*"表示子目录 -->
+			<mvc:mapping path="/user/**" />
+			<!-- 反选，排除资源 -->
+			<mvc:exclude-mapping path="/user/login" />
+
+			<bean id="executtime" class="com.qfedu.interceptor.ExcuteTimeInterceptor"></bean>
+
+
+		</mvc:interceptor>
+	</mvc:interceptors>
+	
+	
+	
+	<!-- 异常处理器的配置 -->
+	
+	<bean class="com.qfedu.exceptionhandler.AllExceptionHandler"></bean>
+ 
+</beans>

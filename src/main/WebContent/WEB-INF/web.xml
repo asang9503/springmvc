@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://java.sun.com/xml/ns/javaee"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+	id="WebApp_ID" version="3.0">
+	<display-name>zz805springmvc</display-name>
+	<welcome-file-list>
+		<welcome-file>index.html</welcome-file>
+		<welcome-file>index.htm</welcome-file>
+		<welcome-file>index.jsp</welcome-file>
+		<welcome-file>default.html</welcome-file>
+		<welcome-file>default.htm</welcome-file>
+		<welcome-file>default.jsp</welcome-file>
+	</welcome-file-list>
+	
+	<!-- springmvc 提供的请求方式转换的过滤器，使支持delete,put等 -->
+	<filter>
+		<filter-name>HiddenHttpMethodFilter</filter-name>
+		<filter-class>org.springframework.web.filter.HiddenHttpMethodFilter</filter-class>
+	</filter>
+
+	<filter-mapping>
+		<filter-name>HiddenHttpMethodFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	<!-- springmvc提供的统一编码的过滤器，就不需要程序员自己创建编码过滤器 -->
+	<filter>
+		<filter-name>encodingFilter</filter-name>
+		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+
+		<init-param>
+			<param-name>encoding</param-name>
+			<param-value>UTF-8</param-value>
+		</init-param>
+		<init-param>
+			<param-name>forceEncoding</param-name>
+			<param-value>true </param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>encodingFilter</filter-name>
+		<url-pattern>/</url-pattern>
+	</filter-mapping>
+
+
+
+	<!-- tomcat默认自带了一个名字叫做default的servlet，专门处理静态资源的。让静态资源通过default，这样就不会经过核心控制器 -->
+
+	<!-- tomcat有三个核心部分，分别是处理静态资源，处理jsp，处理servlet -->
+
+	<!-- 可以解决静态资源被拦截的问题，除了这个意外还可以使用springmvc自带的配置 -->
+	<!-- <servlet-mapping> <servlet-name>default</servlet-name> <url-pattern>*.html</url-pattern> 
+		<url-pattern>*.js</url-pattern> <url-pattern>*.css</url-pattern> <url-pattern>*.png</url-pattern> 
+		</servlet-mapping> -->
+
+
+
+
+
+	<!-- 指定自定义的核心控制器 -->
+	<!-- <servlet> <servlet-name>coreservlet</servlet-name> <servlet-class>com.qfedu.annotation.MyDispactherServlet</servlet-class> 
+		<load-on-startup>1</load-on-startup> </servlet> <servlet-mapping> <servlet-name> 
+		coreservlet</servlet-name> <url-pattern>/</url-pattern> </servlet-mapping> -->
+
+
+	<!-- 配置SpringMVC核心控制器： -->
+	<!-- 是一个springmvc提供的一个servlet，用于处理用户请求的，我们叫他核心控制器 -->
+	<servlet>
+		<servlet-name>springDispatcherServlet</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>classPath:springmvc.xml</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>springDispatcherServlet</servlet-name>
+		<url-pattern>/</url-pattern>
+	</servlet-mapping>
+</web-app>

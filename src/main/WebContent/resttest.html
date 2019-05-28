@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript" src="jquery.min.js"></script>
+
+<script type="text/javascript">
+	$(function() {
+
+		$("#del").click(function() {
+
+			//发起一个delete方式的ajax请求
+
+			$.ajax({
+
+				url : "api/v1/user/" + $("#delid").val(),
+				async : true,
+				type : "post",
+				data : {
+					_method : "delete"
+				},
+				success : function(data) {
+
+					if (data.code == 1001) {
+						alert(data.msg)
+					}
+
+				}
+
+			})
+
+		})
+
+	})
+</script>
+</head>
+<body>
+
+	<!-- form表单传统的方式一般不会使用前后端分离，前后端分离都是对应的接口的使用，也就是使用到ajax -->
+	<form action="/api/v1/user" method="post">
+		<input type="text" name="id" /> <input type="hidden" name="_method"
+			value="delete" /> <input type="submit" />
+	</form>
+
+	按照id进行删除
+	<input type="text" value="请输入想要删除的id" id="delid">
+	<input type="button" value="删除" id="del">
+</body>
+</html>
